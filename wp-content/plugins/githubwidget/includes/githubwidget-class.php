@@ -3,7 +3,7 @@
 /**
  * Adds Foo_Widget widget.
  */
-class Youtube_Subs_Widget extends WP_Widget
+class Github_Api_Widget extends WP_Widget
 {
 
 	/**
@@ -12,9 +12,9 @@ class Youtube_Subs_Widget extends WP_Widget
 	function __construct()
 	{
 		parent::__construct(
-			'youtubesubs_widget', // Base ID
-			esc_html__('YouTube Subs', 'yts_domain'), // Name
-			array('description' => esc_html__('Widget to display youtube subscription.', 'yts-domain'),) // Args
+			'githubapi_widget', // Base ID
+			esc_html__('Github Widget', 'ghw_domain'), // Name
+			array('description' => esc_html__('Widget to display github profile information.', 'ghw-domain'),) // Args
 		);
 	}
 
@@ -31,13 +31,30 @@ class Youtube_Subs_Widget extends WP_Widget
 	{
 		echo $args['before_widget']; // whatever you'd like to display before widget (<div>, etc)
 
+		// PHP API CALL
+		function get_git_api()
+		{
+			$url = 'https://api.github.com/users/fitDizzle';
+			$arguments = array(
+				'method' => 'GET',
+			);
+			$response = wp_remote_get($url, $arguments);
+			if (is_wp_error($response)) {
+				$error_message = $response->get_error_message();
+				echo 'Something went wrong: $error_message';
+			}
+			$data =	var_dump(wp_remote_retrieve_body($response));
+		}
+
+		// CHECK FOR WIDGET DATA AND SET DEFAULT
 		if (!empty($instance['title'])) {
 			echo $args['before_title'] . apply_filters('widget_title', $instance['title']) . $args['after_title'];
 		}
 
 		// Widget Content Output
-		echo '<div class="g-ytsubscribe" data-channel="' . $instance['channel'] . '" data-layout="' . $instance['layout'] . '" 
-		data-count="' . $instance['count'] . '"></div>';
+		$datatorender = get_git_api();
+		print_r($datatorender, 'DATA');
+		echo json_encode('$datatorender', True);
 
 		echo $args['after_widget']; // whatever you'd like to display after widget (<div>, etc)
 	}
@@ -51,13 +68,11 @@ class Youtube_Subs_Widget extends WP_Widget
 	 */
 	public function form($instance)
 	{
-		$title = !empty($instance['title']) ? $instance['title'] : esc_html__('YouTube Subs', 'yts_domain');
+		$githubusername = !empty($instance['title']) ? $instance['title'] : esc_html__('Github Widget', 'ghw_domain');
 
-		$channel = !empty($instance['channel']) ? $instance['channel'] : esc_html__('techguyweb', 'yts_domain');
+		$itemtofetchfromgithubapi = !empty($instance['channel']) ? $instance['channel'] : esc_html__('techguyweb', 'ghw_domain');
 
-		$layout = !empty($instance['layout']) ? $instance['layout'] : esc_html__('default', 'yts_domain');
-
-		$count = !empty($instance['count']) ? $instance['count'] : esc_html__('default', 'yts_domain');
+		$layout = !empty($instance['layout']) ? $instance['layout'] : esc_html__('default', 'ghw_domain');
 ?>
 
 
@@ -65,7 +80,7 @@ class Youtube_Subs_Widget extends WP_Widget
 		<!-- Title -->
 		<p>
 			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>">
-				<?php esc_attr_e('Title:', 'yts_domain'); ?>
+				<?php esc_attr_e('Title:', 'ghw_domain'); ?>
 			</label>
 			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>">
 		</p>
@@ -74,34 +89,20 @@ class Youtube_Subs_Widget extends WP_Widget
 		<!-- Channel -->
 		<p>
 			<label for="<?php echo esc_attr($this->get_field_id('channel')); ?>">
-				<?php esc_attr_e('Channel:', 'yts_domain'); ?>
+				<?php esc_attr_e('Channel:', 'ghw_domain'); ?>
 			</label>
 			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('channel')); ?>" name="<?php echo esc_attr($this->get_field_name('channel')); ?>" type="text" value="<?php echo esc_attr($channel); ?>">
 		</p>
 
-
 		<!-- LAYOUT -->
 		<p>
 			<label for="<?php echo esc_attr($this->get_field_id('layout')); ?>">
-				<?php esc_attr_e('Layout:', 'yts_domain'); ?>
+				<?php esc_attr_e('Layout:', 'ghw_domain'); ?>
 			</label>
 
 			<select class="widefat" id="<?php echo esc_attr($this->get_field_id('layout')); ?>" name="<?php echo esc_attr($this->get_field_name('layout')); ?>">
 				<option value="default" <?php echo ($layout == 'default') ? 'selected' : ''; ?>>Default</option>
 				<option value="full" <?php echo ($layout == 'full') ? 'selected' : ''; ?>>Full</option>
-			</select>
-		</p>
-
-
-		<!-- COUNT -->
-		<p>
-			<label for="<?php echo esc_attr($this->get_field_id('count')); ?>">
-				<?php esc_attr_e('Count:', 'yts_domain'); ?>
-			</label>
-
-			<select class="widefat" id="<?php echo esc_attr($this->get_field_id('count')); ?>" name="<?php echo esc_attr($this->get_field_name('count')); ?>">
-				<option value="default" <?php echo ($count == 'default') ? 'selected' : ''; ?>>Default</option>
-				<option value="hidden" <?php echo ($count == 'hidden') ? 'selected' : ''; ?>>Hidden</option>
 			</select>
 		</p>
 <?php
@@ -131,8 +132,6 @@ class Youtube_Subs_Widget extends WP_Widget
 		$instance['channel'] = (!empty($new_instance['channel'])) ? sanitize_text_field($new_instance['channel']) : '';
 
 		$instance['layout'] = (!empty($new_instance['layout'])) ? sanitize_text_field($new_instance['layout']) : '';
-
-		$instance['count'] = (!empty($new_instance['count'])) ? sanitize_text_field($new_instance['count']) : '';
 
 		return $instance;
 	}
