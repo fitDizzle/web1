@@ -38,12 +38,20 @@ class Github_Api_Widget extends WP_Widget
 			$arguments = array(
 				'method' => 'GET',
 			);
+
 			$response = wp_remote_get($url, $arguments);
+
 			if (is_wp_error($response)) {
 				$error_message = $response->get_error_message();
 				echo 'Something went wrong: $error_message';
 			}
-			$data =	var_dump(wp_remote_retrieve_body($response));
+			print_r(json_decode($response['body']));
+			print_r(json_decode($response['body'])->id);
+			print_r(json_decode($response['body'])->login);
+			print_r(json_decode($response['body'])->following_url);
+			print_r(json_decode($response['body'])->avatar_url);
+
+			// $data =	var_export(wp_remote_retrieve_body($response));
 		}
 
 		// CHECK FOR WIDGET DATA AND SET DEFAULT
@@ -51,10 +59,9 @@ class Github_Api_Widget extends WP_Widget
 			echo $args['before_title'] . apply_filters('widget_title', $instance['title']) . $args['after_title'];
 		}
 
-		// Widget Content Output
+		// Widget Content On_decode(utput
 		$datatorender = get_git_api();
-		print_r($datatorender, 'DATA');
-		echo json_encode('$datatorender', True);
+		// echo $datatorender = 'login';
 
 		echo $args['after_widget']; // whatever you'd like to display after widget (<div>, etc)
 	}
@@ -84,7 +91,6 @@ class Github_Api_Widget extends WP_Widget
 			</label>
 			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>">
 		</p>
-
 
 		<!-- Channel -->
 		<p>
