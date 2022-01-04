@@ -45,11 +45,11 @@ class Github_Api_Widget extends WP_Widget
 				$error_message = $response->get_error_message();
 				echo 'Something went wrong: $error_message';
 			}
-			print_r(json_decode($response['body']));
-			print_r(json_decode($response['body'])->id);
-			print_r(json_decode($response['body'])->login);
-			print_r(json_decode($response['body'])->following_url);
-			print_r(json_decode($response['body'])->avatar_url);
+
+			// print_r(json_decode($response['body']));
+			echo '<h3>' . 'id:' . '</h3>' . json_decode($response['body'])->id . '<br>';
+			echo '<h3>' . 'username:' . '</h3>' . json_decode($response['body'])->login . '<br>';
+			echo '<h3>' . 'bio:' . '</h3>' . json_decode($response['body'])->bio . '<br>';
 
 			// $data =	var_export(wp_remote_retrieve_body($response));
 		}
@@ -61,7 +61,6 @@ class Github_Api_Widget extends WP_Widget
 
 		// Widget Content On_decode(utput
 		$datatorender = get_git_api();
-		// echo $datatorender = 'login';
 
 		echo $args['after_widget']; // whatever you'd like to display after widget (<div>, etc)
 	}
@@ -75,9 +74,9 @@ class Github_Api_Widget extends WP_Widget
 	 */
 	public function form($instance)
 	{
-		$githubusername = !empty($instance['title']) ? $instance['title'] : esc_html__('Github Widget', 'ghw_domain');
+		$title = !empty($instance['title']) ? $instance['title'] : esc_html__('Github Widget', 'ghw_domain');
 
-		$itemtofetchfromgithubapi = !empty($instance['channel']) ? $instance['channel'] : esc_html__('techguyweb', 'ghw_domain');
+		$username = !empty($instance['channel']) ? $instance['channel'] : esc_html__('techguyweb', 'ghw_domain');
 
 		$layout = !empty($instance['layout']) ? $instance['layout'] : esc_html__('default', 'ghw_domain');
 ?>
@@ -92,7 +91,7 @@ class Github_Api_Widget extends WP_Widget
 			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>">
 		</p>
 
-		<!-- Channel -->
+		<!-- Username -->
 		<p>
 			<label for="<?php echo esc_attr($this->get_field_id('channel')); ?>">
 				<?php esc_attr_e('Channel:', 'ghw_domain'); ?>
@@ -100,7 +99,7 @@ class Github_Api_Widget extends WP_Widget
 			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('channel')); ?>" name="<?php echo esc_attr($this->get_field_name('channel')); ?>" type="text" value="<?php echo esc_attr($channel); ?>">
 		</p>
 
-		<!-- LAYOUT -->
+		<!-- Layout -->
 		<p>
 			<label for="<?php echo esc_attr($this->get_field_id('layout')); ?>">
 				<?php esc_attr_e('Layout:', 'ghw_domain'); ?>
@@ -135,7 +134,7 @@ class Github_Api_Widget extends WP_Widget
 
 		$instance['title'] = (!empty($new_instance['title'])) ? sanitize_text_field($new_instance['title']) : '';
 
-		$instance['channel'] = (!empty($new_instance['channel'])) ? sanitize_text_field($new_instance['channel']) : '';
+		$instance['username'] = (!empty($new_instance['channel'])) ? sanitize_text_field($new_instance['channel']) : '';
 
 		$instance['layout'] = (!empty($new_instance['layout'])) ? sanitize_text_field($new_instance['layout']) : '';
 
