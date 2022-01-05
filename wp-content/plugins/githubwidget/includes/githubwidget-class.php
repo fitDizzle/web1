@@ -31,7 +31,7 @@ class Github_Api_Widget extends WP_Widget
 	{
 		echo $args['before_widget']; // whatever you'd like to display before widget (<div>, etc)
 
-		// PHP API CALL
+		// Api call to github
 		function get_git_api()
 		{
 			$url = 'https://api.github.com/users/fitDizzle';
@@ -46,12 +46,11 @@ class Github_Api_Widget extends WP_Widget
 				echo 'Something went wrong: $error_message';
 			}
 
-			// print_r(json_decode($response['body']));
-			echo '<h3>' . 'id:' . '</h3>' . json_decode($response['body'])->id . '<br>';
-			echo '<h3>' . 'username:' . '</h3>' . json_decode($response['body'])->login . '<br>';
-			echo '<h3>' . 'bio:' . '</h3>' . json_decode($response['body'])->bio . '<br>';
-
-			// $data =	var_export(wp_remote_retrieve_body($response));
+			echo '<div>' .
+				'<h3>' . 'id:' . '</h3>' . json_decode($response['body'])->id . '<br>' .
+				'<h3>' . 'username:' . '</h3>' . json_decode($response['body'])->login . '<br>' .
+				'<h3>' . 'bio:' . '</h3>' . json_decode($response['body'])->bio . '<br>' .
+				'</div>';
 		}
 
 		// CHECK FOR WIDGET DATA AND SET DEFAULT
@@ -80,9 +79,6 @@ class Github_Api_Widget extends WP_Widget
 
 		$layout = !empty($instance['layout']) ? $instance['layout'] : esc_html__('default', 'ghw_domain');
 ?>
-
-
-
 		<!-- Title -->
 		<p>
 			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>">
@@ -113,7 +109,6 @@ class Github_Api_Widget extends WP_Widget
 <?php
 	}
 
-
 	// UPDATE FORM DATA / WIDGET DATA //
 
 	/**
@@ -140,4 +135,4 @@ class Github_Api_Widget extends WP_Widget
 
 		return $instance;
 	}
-} // class Foo_Widget
+} // class Github_Api_Widget
