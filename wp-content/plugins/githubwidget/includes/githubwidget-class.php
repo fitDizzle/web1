@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Adds Foo_Widget widget.
+ * Adds Github_Api_Widget widget.
  */
 class Github_Api_Widget extends WP_Widget
 {
@@ -89,10 +89,10 @@ class Github_Api_Widget extends WP_Widget
 
 		<!-- Username -->
 		<p>
-			<label for="<?php echo esc_attr($this->get_field_id('channel')); ?>">
+			<label for="<?php echo esc_attr($this->get_field_id('username')); ?>">
 				<?php esc_attr_e('Channel:', 'ghw_domain'); ?>
 			</label>
-			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('channel')); ?>" name="<?php echo esc_attr($this->get_field_name('channel')); ?>" type="text" value="<?php echo esc_attr($channel); ?>">
+			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('username')); ?>" name="<?php echo esc_attr($this->get_field_name('channel')); ?>" type="text" value="<?php echo esc_attr($username); ?>">
 		</p>
 
 		<!-- Layout -->
