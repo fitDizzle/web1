@@ -45,7 +45,7 @@ class Github_Api_Widget extends WP_Widget
 				$error_message = $response->get_error_message();
 				echo 'Something went wrong: $error_message';
 			}
-
+			
 			echo '<div>' .
 				'<h3>' . 'id:' . '</h3>' . json_decode($response['body'])->id . '<br>' .
 				'<h3>' . 'username:' . '</h3>' . json_decode($response['body'])->login . '<br>' .
@@ -75,7 +75,7 @@ class Github_Api_Widget extends WP_Widget
 	{
 		$title = !empty($instance['title']) ? $instance['title'] : esc_html__('Github Widget', 'ghw_domain');
 
-		$username = !empty($instance['channel']) ? $instance['channel'] : esc_html__('techguyweb', 'ghw_domain');
+		$username = !empty($instance['username']) ? $instance['username'] : esc_html__('fitDizzle', 'ghw_domain');
 
 		$layout = !empty($instance['layout']) ? $instance['layout'] : esc_html__('default', 'ghw_domain');
 ?>
@@ -90,7 +90,7 @@ class Github_Api_Widget extends WP_Widget
 		<!-- Username -->
 		<p>
 			<label for="<?php echo esc_attr($this->get_field_id('username')); ?>">
-				<?php esc_attr_e('Channel:', 'ghw_domain'); ?>
+				<?php esc_attr_e('Username:', 'ghw_domain'); ?>
 			</label>
 			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('username')); ?>" name="<?php echo esc_attr($this->get_field_name('channel')); ?>" type="text" value="<?php echo esc_attr($username); ?>">
 		</p>
@@ -129,7 +129,7 @@ class Github_Api_Widget extends WP_Widget
 
 		$instance['title'] = (!empty($new_instance['title'])) ? sanitize_text_field($new_instance['title']) : '';
 
-		$instance['username'] = (!empty($new_instance['channel'])) ? sanitize_text_field($new_instance['channel']) : '';
+		$instance['username'] = (!empty($new_instance['username'])) ? sanitize_text_field($new_instance['username']) : '';
 
 		$instance['layout'] = (!empty($new_instance['layout'])) ? sanitize_text_field($new_instance['layout']) : '';
 
